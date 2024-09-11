@@ -7,76 +7,110 @@ os.environ['CUDA_VISIBLE_DEVICES'] = '0'
 from astropy import units as u
 
 import setigen as stg
-
-
+import numpy as np
 import argparse
 
 parser = argparse.ArgumentParser(description="generate hdf5 filterbank files from voltages with given noise distribution and a single injected signal")
 parser.add_argument('-n', '--std', type=float, dest='v_std', required=True,
                     help='Standard deviation value')
 
-parser.add_argument('-a', '--amplitude', type=float, dest='amplitude', default=0.1,
-                    help='Amplitude value (default: 0.1)')
+parser.add_argument('--snr', type=float, dest='snr', default=1,
+                    help='target snr of injected signal (default: 1000)')
 
-parser.add_argument('-d', '--drift', type=float, dest='drift', default=2.0,
-                    help='Drift value (default: 0.0)')
+parser.add_argument('-d', '--drift', type=float, dest='drift', default=3.4,
+                    help='Drift value (default: 3.4)')
 
 args = parser.parse_args()
 
-v_std = args.v_std
-amplitude = args.amplitude
-drift = args.drift
+target_snr = args.amplitude
+drift_rate = args.drift
 
-sample_rate = 3e9 / 256
+subsample_factor = 4
+
+sample_rate = 3e9 / subsample_factor
 num_taps = 12
-num_branches = 1024 // 256
+num_branches = 1024 // subsample_factor
 
 chan_bw = sample_rate / num_branches
 
-digitizer = stg.voltage.RealQuantizer(target_fwhm=32,
+digitizer = stg.voltage.RealQuantizer(target_fwhm=8,
                                       num_bits=8)
 
 filterbank = stg.voltage.PolyphaseFilterbank(num_taps=num_taps,
                                              num_branches=num_branches)
 
-requantizer = stg.voltage.ComplexQuantizer(target_fwhm=32,
+requantizer = stg.voltage.ComplexQuantizer(target_fwhm=8,
                                            num_bits=8)
 
-num_pols = 1
+num_pols = 2
 antenna = stg.voltage.Antenna(sample_rate=sample_rate,
                               fch1=6*u.GHz,
                               ascending=True,
                               num_pols=num_pols,
                               seed=42)
 
-# The docs example uses this
-antenna.x.add_noise(v_mean=0,
-                    v_std=v_std)
+fftlength = 2**20 # 1048576 (expected fine channelization down the pipe)
+int_factor = 51
 
-antenna.x.add_constant_signal(f_start=6000.3e6,
-                              drift_rate=-2*u.Hz/u.s,
-                              level=0.002)
-
-# # the notebook example uses this
-# for stream in antenna.streams:
-#     stream.add_noise(v_mean=0,
-#                      v_std=v_std)
+block_size = stg.voltage.get_block_size(num_antennas=1,
+                                        tchans_per_block=1,
+                                        num_bits=8,
+                                        num_pols=2,
+                                        num_branches=num_branches,
+                                        num_chans=num_branches//2,
+                                        fftlength=fftlength,
+                                        int_factor=int_factor)
+# block_size = 134217728
 
 rvb = stg.voltage.RawVoltageBackend(antenna,
                                     digitizer=digitizer,
                                     filterbank=filterbank,
                                     requantizer=requantizer,
-                                    start_chan=0,
+                                    start_chan=1,
                                     num_chans=1,
-                                    block_size=32*6*2097152,
+                                    block_size=block_size,
                                     blocks_per_file=128,
-                                    num_subblocks=4)
+                                    num_subblocks=32)
 
-fname = f'test_v_std{v_std}_pols{num_pols}'
-rvb.record(output_file_stem=fname,
-           num_blocks=1, 
-           length_mode='num_blocks',
-           header_dict={'TELESCOP': 'GBT'},
-           verbose=True)
+
+# Add noise
+for stream in antenna.streams:
+    stream.add_noise(v_mean=0,
+                     v_std=1)
+
+obs_length = 300
+# Add signals
+signal_level = stg.voltage.get_level(target_snr,
+                                     rvb,
+                                     obs_length=obs_length,
+                                     length_mode='obs_length',
+                                     fftlength=fftlength)
+
+unit_drift_rate = stg.voltage.get_unit_drift_rate(rvb, fftlength, 1)
+print(unit_drift_rate)
+print(10*unit_drift_rate)
+
+
+chan_bw = sample_rate / num_branches
+df = np.abs(chan_bw / fftlength)
+
+f_start = 6000.e6 + sample_rate/num_branches + .4e6
+leakage_factor = stg.voltage.get_leakage_factor(f_start, rvb, fftlength)
+print(f"leakage factor is {leakage_factor}")
+leakage_factor = 1
+for stream in antenna.streams:
+    level = stream.get_total_noise_std() * leakage_factor * signal_level
+    stream.add_constant_signal(f_start=f_start,
+                                drift_rate=drift_rate,
+                                level=level)
+
+DATA_DIR = '//home/nathan/datasets/siggen/raw_files/'
+rvb.record(output_file_stem=f'{DATA_DIR}/doppler_smear_test_gpu_offset_1000_leakagecorrected_injected_f={f_start}_drift={drift_rate}',
+           obs_length=obs_length,
+           length_mode='obs_length',
+           header_dict={'HELLO': 'test_value',
+                        'TELESCOP': 'GBT'},
+           verbose=False)
+
 
 

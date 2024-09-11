@@ -49,7 +49,7 @@ rvb = stg.voltage.RawVoltageBackend(antenna,
                                     digitizer=digitizer,
                                     filterbank=filterbank,
                                     requantizer=requantizer,
-                                    start_chan=0,
+                                    start_chan=1,
                                     num_chans=1,
                                     block_size=block_size,
                                     blocks_per_file=128,
@@ -68,22 +68,27 @@ signal_level = stg.voltage.get_level(1000,
                                      length_mode='obs_length',
                                      fftlength=fftlength)
 
-unit_drift_rate = stg.voltage.get_unit_drift_rate(rvb, fftlength, int_factor)
+unit_drift_rate = stg.voltage.get_unit_drift_rate(rvb, fftlength, 1)
+print(unit_drift_rate)
+print(10*unit_drift_rate)
+
 
 chan_bw = sample_rate / num_branches
 df = np.abs(chan_bw / fftlength)
 
-f_start = 6000.4e6
-# leakage_factor = stg.voltage.get_leakage_factor(f_start, rvb, fftlength)
+f_start = 6000.e6 + sample_rate/num_branches + .4e6
+drift_rate = unit_drift_rate
+leakage_factor = stg.voltage.get_leakage_factor(f_start, rvb, fftlength)
+print(f"leakage factor is {leakage_factor}")
 leakage_factor = 1
 for stream in antenna.streams:
     level = stream.get_total_noise_std() * leakage_factor * signal_level
     stream.add_constant_signal(f_start=f_start,
-                                drift_rate=1 * unit_drift_rate,
+                                drift_rate=drift_rate,
                                 level=level)
 
 DATA_DIR = '//home/nathan/datasets/siggen/raw_files/'
-rvb.record(output_file_stem=f'{DATA_DIR}/doppler_smear_test_gpu_offset_1000_injected_f={f_start}',
+rvb.record(output_file_stem=f'{DATA_DIR}/doppler_smear_test_gpu_offset_1000_leakagecorrected_injected_f={f_start}_drift={drift_rate}',
            obs_length=obs_length,
            length_mode='obs_length',
            header_dict={'HELLO': 'test_value',
