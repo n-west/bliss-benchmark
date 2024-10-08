@@ -1,0 +1,133 @@
+{
+    "chi2_4dof": {
+        "path": "/datax/scratch/nwest/voltage-gen/just_noise_chisq_4dof.h5",
+        "name": "chi2_4dof",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 200000,
+            "upper": 500000
+        }        
+    },
+    "chi2_204dof": {
+        "path": "/datax/scratch/nwest/voltage-gen/just_noise_chisq_204dof.h5",
+        "name": "chi2_204dof",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 200000,
+            "upper": 500000
+        }
+    },
+    "injected_t1": {
+        "path": "/datax/scratch/nwest/voltage-gen/constquant/fbh5/t4/singlecoarse-fwhm_48.0-injected_f_6003329687.5-snr_1000.0-drift_3.4.rawspec.0000.h5",
+        "name": "injected_t1",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/voltgen256_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    },
+    "/datax/scratch/nwest/voltage-gen/constquant/fbh5/t2/singlecoarse-fwhm_48.0-injected_f_6003329687.5-snr_1000.0-drift_3.4.rawspec.0000.h5": {
+        "path": "/datax/scratch/nwest/voltage-gen/constquant/fbh5/t2/singlecoarse-fwhm_48.0-injected_f_6003329687.5-snr_1000.0-drift_3.4.rawspec.0000.h5",
+        "name": "injected_t2",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/voltgen256_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    },
+    "injected_t4": {
+        "path": "/datax/scratch/nwest/voltage-gen/constquant/fbh5/t4/singlecoarse-fwhm_48.0-injected_f_6003329687.5-snr_1000.0-drift_3.4.rawspec.0000.h5",
+        "name": "injected_t4",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/voltgen256_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    },
+    "injected_t8": {
+        "path": "/datax/scratch/nwest/voltage-gen/constquant/fbh5/t8/singlecoarse-fwhm_48.0-injected_f_6003329687.5-snr_1000.0-drift_3.4.rawspec.0000.h5",
+        "name": "injected_t8",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/voltgen256_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    },
+    "injected_t16": {
+        "path": "/datax/scratch/nwest/voltage-gen/constquant/fbh5/t16/singlecoarse-fwhm_48.0-injected_f_6003329687.5-snr_1000.0-drift_3.4.rawspec.0000.h5",
+        "name": "injected_t16",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/voltgen256_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    },
+    "voyager_1": {
+        "path": "/datag/public/voyager_2020/single_coarse_channel/single_coarse_guppi_59046_80036_DIAG_VOYAGER-1_0011.rawspec.0000.h5",
+        "name": "voyager_1",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/gbt_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    },
+    "97 galaxies hist base": {
+        "path": "/datag/pipeline/AGBT21A_996_49/blc03/blc03_guppi_59411_54700_UGCA127_0095.rawspec.0000.h5",
+        "name": "97 galaxies And_XIV_0058 cc0",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/gbt_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    },
+    "97 galaxies And_XIV_0058 cc0": {
+        "path": "/mnt/blpc2//datax/scratch/cgchoza/spliced_blc00010203040506o7o0111213141516o7o021222324252627_guppi_58810_21241_And_XIV_0058.gpuspec.0000.h5",
+        "name": "97 galaxies And_XIV_0058 cc0",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/gbt_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 0,
+        "noise_slice": {
+            "lower": 220000,
+            "upper": 260000
+        }
+    },
+    "97 galaxies And_XIV_0058 cc1": {
+        "path": "/mnt/blpc2//datax/scratch/cgchoza/spliced_blc00010203040506o7o0111213141516o7o021222324252627_guppi_58810_21241_And_XIV_0058.gpuspec.0000.h5",
+        "name": "97 galaxies And_XIV_0058 cc1",
+        "comment": "not flat",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/gbt_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 1,
+        "noise_slice": {
+            "lower": 300000,
+            "upper": 400000
+        }
+    },
+    "97 galaxies And_XIV_0058 cc2": {
+        "path": "/mnt/blpc2//datax/scratch/cgchoza/spliced_blc00010203040506o7o0111213141516o7o021222324252627_guppi_58810_21241_And_XIV_0058.gpuspec.0000.h5",
+        "name": "97 galaxies And_XIV_0058 cc2",
+        "pfb_shape": "/home/nwest/Projects/bliss/telescopes/gbt_pfb.f32",
+        "nfpc": 1048576,
+        "coarse_channel": 2,
+        "noise_slice": {
+            "lower": 250000,
+            "upper": 500000
+        }
+    }
+}
