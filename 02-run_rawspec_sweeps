@@ -1,0 +1,21 @@
+#!/bin/bash
+
+ROOT_FILE=$2
+DEST=$1
+
+mkdir -p $DEST/t1
+mkdir -p $DEST/t2
+mkdir -p $DEST/t4
+mkdir -p $DEST/t8
+mkdir -p $DEST/t16
+mkdir -p $DEST/t32
+mkdir -p $DEST/t64
+
+rawspec -t 1 -f $((2**20)) -p 1 --fbh5 -d $DEST/t1 $ROOT_FILE
+rawspec -t 2 -f $((2**20)) -p 1 --fbh5 -d $DEST/t2 $ROOT_FILE
+rawspec -t 4 -f $((2**20)) -p 1 --fbh5 -d $DEST/t4 $ROOT_FILE
+rawspec -t 8 -f $((2**20)) -p 1 --fbh5 -d $DEST/t8 $ROOT_FILE
+rawspec -t 16 -f $((2**20)) -p 1 --fbh5 -d $DEST/t16 $ROOT_FILE
+rawspec -t 32 -f $((2**20)) -p 1 --fbh5 -d $DEST/t32 $ROOT_FILE
+rawspec -t 64 -f $((2**20)) -p 1 --fbh5 -d $DEST/t64 $ROOT_FILE
+

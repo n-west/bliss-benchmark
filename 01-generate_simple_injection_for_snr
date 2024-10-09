@@ -35,12 +35,14 @@ num_branches = 1024 // subsample_factor
 chan_bw = sample_rate / num_branches
 
 digitizer = stg.voltage.RealQuantizer(target_fwhm=fwhm,
+                                      stats_calc_period=-1,
                                       num_bits=8)
 
 filterbank = stg.voltage.PolyphaseFilterbank(num_taps=num_taps,
                                              num_branches=num_branches)
 
 requantizer = stg.voltage.ComplexQuantizer(target_fwhm=fwhm,
+                                           stats_calc_period=-1,
                                            num_bits=8)
 
 num_pols = 2
@@ -103,8 +105,8 @@ for stream in antenna.streams:
                                 drift_rate=drift_rate,
                                 level=level)
 
-DATA_DIR = '/datax/scratch/nwest/voltage-gen/'
-rvb.record(output_file_stem=f'{DATA_DIR}/singlecoarse_fwhm={fwhm}_injected_f={f_start}_snr={target_snr}_drift={drift_rate}',
+DATA_DIR = '/datax/scratch/nwest/voltage-gen/constquant/guppi'
+rvb.record(output_file_stem=f'{DATA_DIR}/singlecoarse-fwhm_{fwhm}-injected_f_{f_start}-snr_{target_snr}-drift_{drift_rate}',
            obs_length=obs_length,
            length_mode='obs_length',
            header_dict={'HELLO': 'test_value',

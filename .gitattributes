@@ -1,0 +1,5 @@
+telescopes/ata_262144_channels.f32 filter=lfs diff=lfs merge=lfs -text
+telescopes/ata_pfb.f32 filter=lfs diff=lfs merge=lfs -text
+telescopes/gbt_HSR-Rev1A_pfb.f32 filter=lfs diff=lfs merge=lfs -text
+telescopes/gbt_pfb.f32 filter=lfs diff=lfs merge=lfs -text
+telescopes/voltgen256_pfb.f32 filter=lfs diff=lfs merge=lfs -text
